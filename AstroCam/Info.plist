@@ -5,9 +5,9 @@
     <key>CFBundleDisplayName</key>
     <string>AstroCam</string>
     <key>NSCameraUsageDescription</key>
-    <string>AstroCam needs access to the camera for live preview and captures.</string>
+    <string>AstroCam ha bisogno della fotocamera per l'anteprima live e gli scatti.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>AstroCam saves photos to your library and the AstroCam album.</string>
+    <string>AstroCam salva le foto nella libreria e nell'album AstroCam.</string>
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>

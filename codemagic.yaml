@@ -1,0 +1,43 @@
+workflows:
+  astrocam_release:
+    name: AstroCam Release
+    max_build_duration: 60
+    environment:
+      xcode: latest
+      cocoapods: false
+      vars:
+        BUNDLE_ID: com.giuseppe.astrocam
+        XCODE_PROJECT: AstroCam.xcodeproj
+        XCODE_SCHEME: AstroCam
+    scripts:
+      - name: Install Codemagic CLI tools
+        script: |
+          pip3 install --user codemagic-cli-tools
+      - name: Show Xcode targets
+        script: |
+          xcodebuild -list -project "$XCODE_PROJECT"
+      - name: Clean build
+        script: |
+          xcodebuild clean -project "$XCODE_PROJECT" -scheme "$XCODE_SCHEME" -configuration Release
+      - name: Initialize keychain
+        script: |
+          keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+      - name: Add certificates to keychain
+        script: |
+          keychain add-certificates
+      - name: Build IPA
+        script: |
+          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - $CM_BUILD_DIR/build/ios/archive/*.xcarchive
+      - $CM_BUILD_DIR/xcodebuild.log
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_API_KEY
+        key_id: $APP_STORE_CONNECT_KEY_ID
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
