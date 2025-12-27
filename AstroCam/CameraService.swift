@@ -60,11 +60,6 @@ final class CameraService: NSObject {
             if self.session.canAddOutput(self.photoOutput) {
                 self.session.addOutput(self.photoOutput)
                 self.photoOutput.isHighResolutionCaptureEnabled = true
-                if #available(iOS 15.0, *) {
-                    if self.photoOutput.isPhotoQualityPrioritizationSupported {
-                        self.photoOutput.photoQualityPrioritization = .quality
-                    }
-                }
             } else {
                 self.session.commitConfiguration()
                 DispatchQueue.main.async {
@@ -221,10 +216,8 @@ final class CameraService: NSObject {
             }
 
             settings.isHighResolutionPhotoEnabled = true
-            if #available(iOS 15.0, *) {
-                if self.photoOutput.isPhotoQualityPrioritizationSupported {
-                    settings.photoQualityPrioritization = .quality
-                }
+            if #available(iOS 13.0, *) {
+                settings.photoQualityPrioritization = .quality
             }
 
             self.photoOutput.capturePhoto(with: settings, delegate: self)
